@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="358016de-7b6f-4008-80ce-4720247c63d3" name="Default Changelist" comment="" />
+    <list default="true" id="358016de-7b6f-4008-80ce-4720247c63d3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,9 +13,11 @@
   <component name="Git.Settings">
     <option name="PREVIEW_PUSH_ON_COMMIT_AND_PUSH" value="false" />
     <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JupyterTrust" id="50c2eecd-4361-475e-9978-418f106e644f" />
   <component name="ProjectId" id="1wocGM82ivE8ouCLC5XTC5DmD0b" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -57,7 +62,7 @@
       <workItem from="1629128298482" duration="98000" />
       <workItem from="1629128420680" duration="159000" />
       <workItem from="1629292071008" duration="4000" />
-      <workItem from="1630822441120" duration="3670000" />
+      <workItem from="1630822441120" duration="4457000" />
     </task>
     <servers />
   </component>
@@ -77,13 +82,21 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1403" y="743" key="Github.CreateGistDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630828049890" />
-    <state x="1182" y="549" key="Github.ShareDialog" timestamp="1630827837818">
+    <state x="1182" y="549" key="Github.ShareDialog" timestamp="1630828760377">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1182" y="549" key="Github.ShareDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630827837818" />
+    <state x="1182" y="549" key="Github.ShareDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630828760377" />
+    <state x="1361" y="529" key="Github.UntrackedFilesDialog" timestamp="1630828594435">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1361" y="529" key="Github.UntrackedFilesDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630828594435" />
     <state x="569" y="456" key="SettingsEditor" timestamp="1630828242144">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="569" y="456" key="SettingsEditor/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630828242144" />
+    <state x="1184" y="557" key="Vcs.Push.Dialog.v2" timestamp="1630828923478">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1184" y="557" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630828923478" />
   </component>
 </project>
