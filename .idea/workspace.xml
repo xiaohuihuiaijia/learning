@@ -14,7 +14,7 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="JupyterTrust" id="50c2eecd-4361-475e-9978-418f106e644f" />
+  <component name="JupyterTrust" id="1e585bf7-0f8c-46a1-964c-c0fe4ca91bce" />
   <component name="ProjectId" id="1wocGM82ivE8ouCLC5XTC5DmD0b" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -62,6 +62,7 @@
       <workItem from="1629128420680" duration="159000" />
       <workItem from="1629292071008" duration="4000" />
       <workItem from="1630822441120" duration="8769000" />
+      <workItem from="1630937544943" duration="441000" />
     </task>
     <task id="LOCAL-00001" summary="first">
       <created>1630829052918</created>
@@ -109,9 +110,9 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="569" y="456" key="SettingsEditor/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630831150769" />
-    <state x="1184" y="557" key="Vcs.Push.Dialog.v2" timestamp="1630832017935">
+    <state x="1184" y="557" key="Vcs.Push.Dialog.v2" timestamp="1630937925960">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1184" y="557" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630832017935" />
+    <state x="1184" y="557" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1630937925960" />
   </component>
 </project>

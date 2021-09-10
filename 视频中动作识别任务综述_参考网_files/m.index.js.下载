@@ -1,0 +1,400 @@
+var api = "https://api.fx361.com"
+var api2 = "https://api2.fx361.com"//搜索（缓存）
+function getUrlKey(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
+}
+
+function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
+}
+function delCookie(name) {
+    document.cookie = name + "=;path=/;domain=fx361.com"
+}
+var userId = getCookie("userId")
+var username = getCookie("username")
+var webUrl = location.href
+checklogin()
+function checklogin() {
+    $.ajax({
+        type: "get",
+        url: api + '/JunJiProject/member/checkLogin?userId=' + userId,
+        dataType: 'json',
+        async: false,
+    }).done(function (data) { //Ajax成功
+        if (data.result == "000") {
+            var sLi = $(".header .login")
+            sLi.hide()
+            sLi.after('<a href="https://my.fx361.com" class="iconfont icon-login username"><span>' + username + '</span></a>')
+        } else {
+            delCookie("username")
+            delCookie("userId")
+        }
+    }).fail(function () {  //失败
+    });
+}
+function tongjitags(tagId) {
+    $.ajax({
+        type: "get",
+        url: api + '/JunJiProject/JUNJI_012_001/addTagsClickNum?id=' + tagId,
+        dataType: 'json',
+        async: true,
+    }).done(function (data) { //Ajax成功
+        if (data.result == "000") {
+        } else {
+            console.log("统计失败")
+        }
+    }).fail(function () {  //失败
+    });
+}
+$(document).ready(function () {
+    if ($("img.lazyload").length > 0) {
+        $("img.lazyload").removeAttr("src");
+        $("img.lazyload").lazyload({
+            placeholder: "",
+            effect: "fadeIn",
+        });
+    }
+    if (webUrl.indexOf("/tags/") != -1) {
+        var tagId = $(".R_C_part h1").attr("data-id")
+        tongjitags(tagId)
+    }
+});
+var prepageSize = 0
+$(function () {
+    var sea_box = $(".search_box")
+    var searchkey = $("#inputKey")
+    var onsearchpage = $('.search_page')
+    var url_keyword = getUrlKey('keyword')
+    var Timekey = null
+    sea_box.find(".searchBtn").click(function () {
+        if (!userId) {
+            location.href = "https://my.fx361.com"
+            return false
+        }
+        var keyword = searchkey.val()
+        if (!searchkey.val()) return false
+        location.href = "/search/index.html?keyword=" + keyword
+    })
+    searchkey.on("input", function () {
+        var key = $(this).val()
+        if (!key) return false
+        if (Timekey) clearTimeout(Timekey)
+        Timekey = setTimeout(function () {
+            searchList(key)
+        }, 2000)
+
+    })
+    searchkey.on("click", function () {
+        var key = $(this).val()
+        if (!key) return false
+        if (Timekey) clearTimeout(Timekey)
+        Timekey = setTimeout(function () {
+            searchList(key)
+        }, 2000)
+
+    })
+    if (onsearchpage.length > 0 && url_keyword) {
+        $("#inputKey").val(url_keyword)
+        page_searchList(url_keyword)
+        scrollingPage(".search_page")
+    }
+});
+function page_searchList(keyword, page) {
+    var params = {
+        pageIndex: page ? page : 1
+    }
+    $.ajax({
+        type: "get",
+        url: api2 + '/JunJiProject/JUNJI_012_001/getSearchList?bkpagesize=20&pagesize=30&keyword=' + keyword,
+        dataType: 'json',
+        data: params,
+        async: false,
+    }).done(function (data) { //Ajax成功
+        if (data.msg == "success") {
+            var bklist = data.bkdata,
+                newslist = data.result,
+                html = "",
+                li1 = "",
+                li2 = ""
+            if (bklist && bklist.length > 0) {
+                $.each(bklist, function (idx, i) {
+                    li1 += '<li><a href="' + i.href + '"><div class="se_imgbox"><img src="' + i.src + '" alt="' + i.title + '"></div><div class="se_descbox"><p class="title">' + i.title + '</p><p class="time">' + i.qishu + '</p></div></a></li>'
+                })
+            }
+            if (newslist && newslist.length > 0) {
+                $.each(newslist, function (idx, i) {
+                    i.href = i.href.replace(".shtml", ".html")
+                    li2 += '<li><a href="/news' + i.href + '"><div class="ar_item"><div class="ar_title">' + i.title + '</div><p><span class="s1">' + i.source + '</span><span class="s2">  ' + i.pdate + '</span></p></div></a></li>'
+                })
+
+            }
+            html = '<ul>' + li1 + li2 + '</ul>'
+            if (params.pageIndex == 1) {
+                $(".search_page").html(html)
+            } else {
+                $(".search_page ul").append(li2)
+            }
+            prepageSize = Math.ceil(data.count / 50)
+        }
+    }).fail(function () {  //失败
+    });
+}
+function searchList(keyword) {
+    $("#search_result").html("")
+    $.ajax({
+        type: "get",
+        url: api2 + '/JunJiProject/JUNJI_012_001/getSearchList?bkpagesize=3&pagesize=6&keyword=' + keyword,
+        dataType: 'json',
+    }).done(function (data) { //Ajax成功
+        if (data.msg == "success") {
+            var bklist = data.bkdata,
+                newslist = data.result,
+                html = "",
+                li1 = "",
+                li2 = ""
+            if (bklist.length > 0) {
+                $.each(bklist, function (idx, i) {
+                    li1 += '<li><a href="' + i.href + '">' + i.title + '<span class="qishu"> (' + i.qishu + ')</span></a></li>'
+                })
+            }
+            if (newslist.length > 0) {
+                $.each(newslist, function (idx, i) {
+                    li2 += '<li><a href="/news' + i.href + '">' + i.title + '</a></li>'
+                })
+
+            }
+            html = '<div class="search_dropdown"><ul>' + li1 + li2 + '</ul><div class="close" onclick="close_sdia()">关闭</div></div>'
+            $("#search_result").html(html)
+        }
+    }).fail(function () {  //失败
+    });
+}
+function close_sdia() {
+    $("#search_result").html("")
+}
+function scrollingPage(dom) {
+    var timers = null,
+        pageSize = prepageSize,
+        page = 1,
+        st = true
+    $(window).scroll(function () {
+        // 判断如果 设备高度 + 当前滚动条高度 + 60 > 整个文档高度
+        if ($(window).height() + $(window).scrollTop() + 60 > $(document).height()) {
+            if (st && $(dom).length > 0) {
+                st = false
+                $(dom).after("<div class='Isloading'>正在加载中...</div>")
+            }
+            //清除计时器
+            clearTimeout(timers);
+            // 这里写个定时器进行节流，免得疯狂加载
+            timers = setTimeout(function () {
+                st = true
+                page++;
+                $(".Isloading").remove()
+                if (page > pageSize) {
+                    if ($(dom).length > 0) $(dom).after("<div class='Isloading'>已经到底了...</div>")
+                    st = false
+                    return false
+                }
+                page_searchList(getUrlKey('keyword'), page)
+            }, 3000);
+        }
+    })
+}
+
+
+var BookStatus = false
+var ArticleStatus = false
+$(function () {
+
+    var defaue = true;
+    $(".toggle-btn").click(function () {
+        defaue ? $(".navWrap").removeClass("channel-closed") : $(".navWrap").addClass("channel-closed")
+        defaue = !defaue
+    })
+    if (userId && $(".redico").length > 0) {
+        checkMembers($(".redico").attr("onclick").split("'")[1], "redico")
+    }
+    if ($(".main").length > 0 && userId && $(".collico").length > 0) {
+        checkMembers($(".collico").attr("onclick").split("'")[1], "collico")
+    }
+
+    $(".pel_act_descri label").click(function () {
+        $("#baike-intro").toggle();
+        $("#baike-all").toggle();
+        $("label").toggle();
+    });
+})
+function checkMembers(data, btnType) {
+    var params = {
+        type1: data.split("_")[0],
+        objid: data.split("_")[4]
+    }
+    $.ajax({
+        type: "get",
+        url: api + '/JunJiProject/member/checkCollect?userId=' + userId,
+        dataType: 'json',
+        data: params,
+        async: false,
+    }).done(function (data) { //Ajax成功
+        if (data.result == "000") {
+            if (btnType == "redico") {
+                BookStatus = true
+                $('.' + btnType).addClass("icon-heart2").removeClass("icon-heart1")
+                $('.' + btnType).text("已订阅")
+            } else {
+                ArticleStatus = true
+                $('.' + btnType).addClass("icon-collection2").removeClass("icon-collection1")
+                $('.' + btnType).text("已收藏")
+            }
+        }
+    }).fail(function () {  //失败
+        console.log("网络异常")
+    });
+
+}
+function addRead(data, obj) {
+    var $_t = $(obj)
+    BookStatus = !BookStatus
+    if (BookStatus) {
+        Addmembers(data)
+        $_t.addClass("icon-heart2").removeClass("icon-heart1")
+        $_t.text("已订阅")
+    } else {
+        Cancelmembers(data, "redico")
+        $_t.addClass("icon-heart1").removeClass("icon-heart2")
+        $_t.text("订阅")
+    }
+}
+function addcoll(data, obj) {
+    var $_t = $(obj)
+    ArticleStatus = !ArticleStatus
+    if (ArticleStatus) {
+        Addmembers(data)
+        $_t.addClass("icon-collection2").removeClass("icon-collection1")
+        $_t.text("已收藏")
+    } else {
+        Cancelmembers(data, "collico")
+        $_t.addClass("icon-collection1").removeClass("icon-collection2")
+        $_t.text("收藏")
+    }
+}
+function Cancelmembers(data, btnType) {
+    if (!userId) {
+        location.href = "https://my.fx361.com"
+        return false
+    }
+    var params = {
+        type1: data.split("_")[0],
+        objid: data.split("_")[4]
+    }
+    $.ajax({
+        type: "get",
+        url: api + '/JunJiProject/member/delCollect?userId=' + userId,
+        dataType: 'json',
+        data: params,
+        async: false,
+    }).done(function (data) { //Ajax成功
+        if (data.result == "000") {
+            console.log("取消成功")
+        }
+    }).fail(function () {  //失败
+        console.log("网络异常")
+    });
+
+}
+function Addmembers(data) {
+    if (!userId) {
+        location.href = "https://my.fx361.com"
+        return false
+    }
+    var params = {
+        type1: data.split("_")[0],
+        title: data.split("_")[1],
+        riqi: data.split("_")[2],
+        href: data.split("_")[3],
+        objid: data.split("_")[4]
+    }
+    $.ajax({
+        type: "get",
+        url: api + '/JunJiProject/member/addCollect?userId=' + userId,
+        dataType: 'json',
+        data: params,
+        async: false,
+    }).done(function (data) { //Ajax成功
+        if (data.result == "000") {
+            console.log("添加成功")
+        }
+    }).fail(function () {  //失败
+        console.log("网络异常")
+    });
+}
+
+$(function () {
+    if ($(".wz").length > 0) {
+        $.ajax({
+            type: "get",
+            url: api + '/JunJiProject/JUNJI_018_001/001?searchPage=1',
+            dataType: 'json',
+            async: false,
+        }).done(function (res) { //Ajax成功
+            if (res.result == "000") {
+                var list = res.data
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].ad_used == '1' && list[i].ad_path) {
+                        var DomA = list[i].ad_path.split(" ")[0]
+                        var DomB = list[i].ad_path.split(" ")[1]
+                        var coord = list[i].ad_path.split(" ")[2]
+                        if ($(DomA).length > 0 && list[i].ad_type == '1') {
+                            if (coord == 'after') $(DomB).after(list[i].ad_link)
+                            if (coord == 'before') $(DomB).before(list[i].ad_link)
+                            if (coord == 'append') $(DomB).append(list[i].ad_link)
+                            if (coord == 'prepend') $(DomB).prepend(list[i].ad_link)
+                        }
+                    }
+
+                }
+            }
+        }).fail(function () {  //失败
+            console.log("网络异常")
+        });
+    }
+    // var u2 = navigator.userAgent;
+    // var isAndroid = u2.indexOf('Android') > -1 || u2.indexOf('Adr') > -1; //android终端
+    // var wz_cH = $(".wz_content").height()
+    // if (wz_cH > 1600) {
+    //     var article_id = $(".collico").attr("onclick").split("'")[1].split("_")[4]
+    //     $.ajax({
+    //         type: "get",
+    //         url: api + '/JunJiProject/JUNJI_012_001/getIsApp?id=' + article_id,
+    //         dataType: 'json',
+    //         async: false,
+    //     }).done(function (data) { //Ajax成功
+    //         if (data.result == "000") {
+    //             var isApp = data.isApp
+    //             if (isAndroid && isApp == 1) {
+    //                 $(".wz").after('<div class="show_article js-show-article"><span>展开全文▼</span></div>')
+    //             } else {
+    //                 showqw()
+    //             }
+    //         }
+    //     }).fail(function () {  //失败
+    //         console.log("网络异常")
+    //     });
+    // }
+})
+function showzs() {
+    $(".wz").after('<div class="show_article js-show-article"><a href="https://cimg.fx361.com/kkb.apk"><span>app专享阅读▼</span></a></div>')
+
+}
+function showqw() {
+    $(".wz").after('<div class="show_article js-show-article"><span>展开全文▼</span></div>')
+    $(".js-show-article").click(function () {
+        $(".wz").css({ "maxHeight": "100%" })
+        $(this).hide()
+    })
+}
